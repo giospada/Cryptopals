@@ -31,10 +31,12 @@ fn read_yes_or_no(message: &str) -> i8 {
 }
 
 fn xor(inp1: &Vec<u8>, inp2: &Vec<u8>) -> Vec<u8> {
-    let lunghezza_massima = max(inp1.len(), inp2.len());
+    let len1=inp1.len();
+    let len2=inp2.len();
+    let lunghezza_massima = max(len1,len2);
     let mut vettore: Vec<u8> = Vec::with_capacity(lunghezza_massima);
     for x in 0..lunghezza_massima {
-        vettore.push(inp1[x % inp1.len()] ^ inp2[x % inp2.len()]);
+        vettore.push(inp1[x % len1] ^ inp2[x % len2]);
     }
     vettore
 }
@@ -89,40 +91,9 @@ fn main() {
     let content = fs::read_to_string(FILE_NAME)
         .expect(format!("{}{}{}", "Errore File \"", FILE_NAME, "\" non trovato").as_str());
 
-    let content: Vec<&str> = content.split("\n").collect();
+    let key="ICE".as_bytes();
 
-    let mut outputFile = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .create_new(true)
-        .open("output.txt")
-        .unwrap();
+    let content=content.as_bytes();
+    print!("{}\n",hex::encode(xor(&Vec::from(key),&Vec::from(content))));
 
-    let accetable_char=build_frequecy_array(true, true, true, true);
-
-    for (index, row) in content.iter().enumerate() {
-        let inp = hex::decode(row.trim()).expect("Errore nel decriptaggio della linea");
-        outputFile.write_all(format!("___ line {} ___\n", index).as_bytes());
-
-        for x in 0..255 {
-            let x = x as u8;
-            let res = xor(&inp, &vec![x]);
-            let res = String::from_utf8(res);
-
-            if let Err(e) = res {
-                continue;
-            }
-            let mut res = res.unwrap();
-            res.push('\n');
-            if !res.is_ascii(){
-                continue;
-            }
-            let array_char:Vec<char>=res.chars().collect::<Vec<char>>();
-            if !array_char.iter().all(|c| accetable_char.contains(&(*c as u8))) {
-                continue;
-            }
-            outputFile.write_all(res.as_bytes());
-        }
-    }
-    print!("finito")
 }
