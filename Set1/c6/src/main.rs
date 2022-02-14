@@ -88,6 +88,9 @@ fn build_frequecy_array(lower: bool, upper: bool, spaces: bool, punctuation: boo
 }
 
 
+fn hamming_distance(inp1: &Vec<u8>,inp2: &Vec<u8>) -> u32 {
+    xor(inp1, inp2).iter().map(|curr| curr.count_ones() ).sum()
+}
 
 
 fn main() {
@@ -99,4 +102,13 @@ fn main() {
     let content=content.as_bytes();
     print!("{}\n",hex::encode(xor(&Vec::from(key),&Vec::from(content))));
 
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn it_works() {
+        assert_eq!(hamming_distance(&Vec::from("this is a test".as_bytes()),&Vec::from("wokka wokka!!!".as_bytes())),37);
+    }
 }
