@@ -43,12 +43,12 @@ pub fn build_frequecy_array(lower: bool, upper: bool, spaces: bool,number:bool, 
     let mut byte_freq_table: Vec<u8> = Vec::with_capacity(len);
 
     if lower || upper {
-        for current_char in LETTER {
+        for current_char in LETTER.iter() {
             if lower {
-                byte_freq_table.push(current_char as u8);
+                byte_freq_table.push(*current_char as u8);
             }
             if upper {
-                byte_freq_table.push((current_char as u8) - 32);
+                byte_freq_table.push((*current_char as u8) - 32);
             }
         }
     }
@@ -57,13 +57,13 @@ pub fn build_frequecy_array(lower: bool, upper: bool, spaces: bool,number:bool, 
         byte_freq_table.push(' ' as u8);
     }
     if number {
-        for current_char in NUMBER {
-            byte_freq_table.push(current_char as u8);
+        for current_char in NUMBER.iter() {
+            byte_freq_table.push(*current_char as u8);
         }
     }
     if punctuation {
-        for current_char in PUNCTUATION {
-            byte_freq_table.push(current_char as u8);
+        for current_char in PUNCTUATION.iter() {
+            byte_freq_table.push(*current_char as u8);
         }
     }
 

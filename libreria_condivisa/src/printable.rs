@@ -101,8 +101,12 @@ pub const PRINTABLE_CHAR: [u8; 100] = [
     '~' as u8,
 ];
 pub fn is_vec_printable(chars:&[u8]) -> bool {
-    //TODO:da completare
-    chars.iter().fold(true,|last,|);
+    for c in chars{
+        if !is_u8_printable(c){
+            return false;
+        }
+    }
+    true
 }
 
 pub fn is_u8_printable(char:&u8) -> bool {

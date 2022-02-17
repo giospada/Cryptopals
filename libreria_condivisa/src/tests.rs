@@ -36,6 +36,8 @@ fn create_frequency_table_test() {
 
 #[test]
 fn printable_test() {
-    assert_eq!(printable::is_printable('a' as u8),true);
-    assert_eq!(printable::is_printable(1),false);
+    assert_eq!(printable::is_u8_printable(&('a' as u8)),true);
+    assert_eq!(printable::is_u8_printable(&(1 as u8)),false);
+    let vect:Vec<u8>=vec![67, 111, 111, 107, 105, 110, 103, 32, 77, 67, 39, 115, 32, 108, 105, 107, 101, 32, 97, 32, 112, 111, 117, 110, 100, 32, 111, 102, 32, 98, 97, 99, 111, 110];
+    assert_eq!(printable::is_vec_printable(&vect),true);
 }

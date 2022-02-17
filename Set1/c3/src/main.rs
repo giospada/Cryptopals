@@ -2,8 +2,7 @@ use std::fs;
 use hex;
 use std::io::{stdin,stdout};
 use std::io::Write;
-use libreria_condivisa::frequency_table::*;
-use libreria_condivisa::*;
+use libreria_condivisa::{xor_block,printable::*,frequency_table::*};
 
 
 const FILE_NAME:&str="input.txt";
@@ -34,18 +33,22 @@ fn read_input()->Vec<u8>{
 
 fn main() {
 
-    
     let inp=read_input();
-
 
     let freq_map=create_frequency_table(&inp);
     let most_freq=freq_map.iter().max_by_key(|entry|entry.1).unwrap().0;
-
     
     for x in build_frequecy_array(true,false,true,false,false) {
         let key=x^most_freq;
         let res=xor_block(&inp,&vec![key]).unwrap();
+
+        if !is_vec_printable(&res) {
+            println!("skipping '{}'",x as char);
+            continue;
+        }
+
         let res=String::from_utf8(res).unwrap();
+
 
         print!("decodifica con '{}', res {}",x as char,res);
         let mut corretto=false;
@@ -57,6 +60,7 @@ fn main() {
             }
             break;
         }
+
         if corretto {
             print!("Risultato: {}\n",res);
             return;
