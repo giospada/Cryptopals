@@ -97,7 +97,7 @@ pub const PRINTABLE_CHAR: [u8; 98] = [
     '|' as u8,
     '}' as u8,
     '~' as u8,
-];
+    ];
 pub fn is_vec_printable(chars:&[u8]) -> bool {
     for c in chars{
         if !is_u8_printable(c){
