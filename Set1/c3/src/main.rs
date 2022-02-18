@@ -2,7 +2,7 @@ use std::fs;
 use hex;
 use std::io::{stdin,stdout};
 use std::io::Write;
-use libreria_condivisa::{xor_block,printable::*,frequency_table::*};
+use libreria_condivisa::*;
 
 
 const FILE_NAME:&str="input.txt";
@@ -35,22 +35,16 @@ fn main() {
 
     let inp=read_input();
 
-    let freq_map=create_frequency_table(&inp);
+    let freq_map=frequency_table::create_frequency_table(&inp);
     let most_freq=freq_map.iter().max_by_key(|entry|entry.1).unwrap().0;
     
-    for x in build_frequecy_array(true,false,true,false,false) {
-        let key=x^most_freq;
-        let res=xor_block(&inp,&vec![key]).unwrap();
+    let possible:Vec<u8>=frequency_table::build_frequecy_array(true,false,true,false,false).iter().map(|val|val^most_freq).collect();
 
-        if !is_vec_printable(&res) {
-            println!("skipping '{}'",x as char);
-            continue;
-        }
+    xor_bruteforce::try_all_chars_xor(&inp,possible.into_iter(), &printable::is_vec_printable,&mut |chr:u8,decrypted_message:&Vec<u8>|-> bool {
 
-        let res=String::from_utf8(res).unwrap();
+        let res=String::from_utf8(decrypted_message.to_vec()).unwrap();
 
-
-        print!("decodifica con '{}', res {}",x as char,res);
+        print!("decodifica con '{}', res {}",chr as char,res);
         let mut corretto=false;
         loop {
             match (read_yes_or_no("\nVa bene (Y) o vuoi continuare con il prossimo carattere (n)?")){
@@ -60,11 +54,12 @@ fn main() {
             }
             break;
         }
-
         if corretto {
             print!("Risultato: {}\n",res);
-            return;
+            true
+        }else{
+            false
         }
-    }
-    print!("Risultato non trovato");
+    });
+
 }

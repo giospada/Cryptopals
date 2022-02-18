@@ -1,8 +1,6 @@
-pub const PRINTABLE_CHAR: [u8; 100] = [
+pub const PRINTABLE_CHAR: [u8; 98] = [
     '\t' as u8,
     '\n' as u8,
-    '\x0b' as u8,
-    '\x0c' as u8,
     '\r' as u8,
     ' ' as u8,
     '!' as u8,

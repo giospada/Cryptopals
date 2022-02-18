@@ -20,7 +20,7 @@ pub fn hamming_distance(first: &[u8], second: &[u8]) -> Result<u32, &'static str
         .map(|xored_byte| xored_byte.count_ones())
         .sum())
 }
-
+pub mod xor_bruteforce;
 pub mod frequency_table;
 pub mod printable;
 
